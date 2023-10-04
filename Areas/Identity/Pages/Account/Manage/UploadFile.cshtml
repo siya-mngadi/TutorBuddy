@@ -1,0 +1,171 @@
+﻿@page
+@model UploadFileModel
+@{
+    ViewData["Title"] = "Upload Files";
+    ViewData["ActivePage"] = ManageNavPages.UploadFile;
+}
+
+<h4>@ViewData["Title"]</h4>
+<br />
+
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<form asp-route-returnUrl="" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4 table-active" style="border-radius: 17px; height: fit-content; padding: 10px 10px 10px 10px">
+            <h6>
+                Accepted files extensions: <span class="text-primary">docx, doc, pdf, png, jpg, tif, jpeg, ppt, pptx</span>
+            </h6>
+            <input type="file" asp-for="Input.DisplayFile" class="form-control-file" /><br />
+            <div class="form-group">
+                <label asp-for="Input.FileName"></label>
+                <input asp-for="Input.FileName" class="form-control" maxlength="30" placeholder="e.g. Programming" />
+                <span asp-validation-for="Input.FileName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.FileDescription"></label>
+                <textarea asp-for="Input.FileDescription" class="form-control" maxlength="80" placeholder="e.g. Introduction video chapter 1"></textarea>
+                <span asp-validation-for="Input.FileDescription" class="text-danger"></span>
+            </div>
+            <button type="submit" name="filesubmit" class="btn btn-primary">Upload</button>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group" style="text-align: center;">
+                <div style="max-height:380px; overflow-y: auto; scroll-behavior:smooth">
+                    <table class="col-sm-12 table table-active" style="border-radius: 17px">
+                        <thead>
+                            <tr>
+                                <th>
+                                    File Name
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Type
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var file in Model.Files)
+
+                            {
+                                <tr>
+                                    <td>
+                                        <p>@file.FileName</p>
+                                    </td>
+
+                                    <td>
+                                        <p>@file.FileDescription</p>
+                                    </td>
+
+                                    <td>
+                                        <p>@file.FileType</p>
+                                    </td>
+
+                                    <td>
+                                      <a onclick="showPopup('@Url.Action("DeleteFile","Home",new {Id= file.FileID},Request.Scheme)','Delete')" class="btn btn-danger"><i class="far fa-thrash"></i>Delete</a>
+                                     </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $('#module-select').chosen(
+            { max_selected_options: 4, width: "100%" }).addClass('form-control');
+
+
+        showPopup = (url, title) => {
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (res) {
+                    $("#form-modal .modal-body").html(res);
+
+                    $("#form-modal .modal-title").html(title);
+
+                    $("#form-modal").modal('show');
+                }
+            })
+        };
+
+
+        jQueryAjaxPost = (form, title) => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+
+                            $('#form-modal .modal-body').html('');
+                            $('#form-modal .modal-title').html('');
+                            $('#form-modal').modal('hide');
+                            location.reload();
+                        }
+                        else {
+
+                            $('#form-modal .modal-title').html(title);
+                            $('#form-modal .modal-body').html(res.html);
+                            $("#form-modal").modal('show');
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        };
+
+        jQueryAjaxDelete = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    success: function (res) {
+                        $('#form-modal .modal-body').html('');
+                        $('#form-modal .modal-title').html('');
+                        $('#form-modal').modal('hide');
+                        location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            } catch (e) {
+                console.log(e);
+            }
+
+            //to prevent default form submit event
+            return false;
+        };
+
+
+    </script>
+}

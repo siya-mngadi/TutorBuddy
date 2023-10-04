@@ -1,0 +1,265 @@
+﻿@page
+@model Index_TutorModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.IndexTutor;
+}
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <form id="profile-form" asp-route-returnUrl="" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" disabled />
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" disabled />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" disabled />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Input.YearOfStudy"></label>
+                            <select asp-for="Input.YearOfStudy" class="form-control">
+                                <option value="" disabled selected>@Model.Input.YearOfStudy</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="Honours">Honours</option>
+                                <option value="Masters">Masters</option>
+                                <option value="Doctorate">Doctorate</option>
+                                <option value="PhD">PhD</option>
+                            </select>
+                            <span asp-validation-for="Input.YearOfStudy" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Input.PhoneNumber"></label>
+                            <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Optional" />
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" style="text-align:center">
+                    <div style="text-align:center" class="noselect">
+                        <input asp-for="@Model.Input.DisplayPhoto style=" color:transparent;text-align: center;border:none;"
+                               onchange="document.getElementById('DisplayPhotoPrev').src = window.URL.createObjectURL(this.files[0])" />
+                        <br /> <img style="text-align:center; border:2px dotted black;border-radius:17px" id="DisplayPhotoPrev" src="~/IMGprofiles/@(Model.Input.UserProfile)" alt="Profile Photo"
+                                    width="180" height="180" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label asp-for="Input.TypeOfTutor"></label>
+                    <input type="checkbox" asp-for="Input.TypeOfTutor" class="form-control" id="MyChk" onchange="onValueChanged()" />
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>Hourly Fee (R)</label>
+                    <input type="number" asp-for="Input.HourlyFee" id="HourlyFeeId" readonly class="form-control" />
+                    <span asp-validation-for="Input.HourlyFee"></span>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+
+                    <div class="col-sm-10">
+                        <label>Module(s)</label>
+                    </div>
+                    @*<div class="col-sm-10">
+                            @Html.ListBoxFor(x => x.Input.ModuleList, Model.Modules.Select(x => new SelectListItem { Text = x.ModuleName, Value = x.ModuleCode }), htmlAttributes: new { @class = "form-control", @id = "module-select", @multiple = "multiple" })
+                        </div>*@
+
+                    <div class="col-sm-10">
+                        @Html.ListBoxFor(x => x.Input.ModuleList, Model.Modules.Select(x => new SelectListItem { Text = x.ModuleName, Value = x.ModuleCode }),
+                      new { @class = "form-control", @id = "module-select", @multiple = "multiple" })
+                    </div>
+                    <span asp-validation-for="@Model.Input.TutorModules"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <table class="col-md-12 table table-responsive" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="col-md-3">
+                                    Day
+                                </th>
+
+                                <th class="col-md-3">
+                                    Start Time
+                                </th>
+
+                                <th class="col-md-3">
+                                    End Time
+                                </th>
+                                <th class="col-md-3">
+                                    <a onclick="showPopup('@Url.Action("AddTimeSlot","Home",values: new {Id= Model.StudentNumber},Request.Scheme)','Add Timeslot')" class="btn btn-primary"><i class="fa fa-plus"></i>Add Slot</a>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int y = 0; y < Model.Input.TimeSlots.Count; y++)
+                            {
+                                <tr>
+                                    <td>
+
+                                       @* @Html.DropDownListFor(x => x.Input.TimeSlots[y].SessionDay, new SelectList(Model.Weekdays), htmlAttributes: new { @class = "form-control", @id = "ModuleId" })
+*@
+                                        <p>@Model.Input.TimeSlots[y].SessionDay</p>
+                                    </td>
+
+                                    <td>
+
+                                       @* @Html.EditorFor(x => x.Input.TimeSlots[y].SessionStartTime, new { htmlAttributes = new { @class = "form-control" }, @type = "time" })
+*@
+                                        <p>@Model.Input.TimeSlots[y].SessionEndTime.ToString("hh':'mm tt")</p>
+                                    </td>
+
+                                    <td>
+
+                                       @* @Html.EditorFor(x => x.Input.TimeSlots[y].SessionEndTime, new { htmlAttributes = new { @class = "form-control" }, @type = "time" })
+*@
+
+                                        <p>@Model.Input.TimeSlots[y].SessionEndTime.ToString("hh':'mm tt")</p>
+                                    </td>
+                                    <td class="col-md-3">
+
+                                        <a onclick="showPopup('@Url.Action("DeleteTime","Home",new {Id= Model.Input.TimeSlots[y].TimeSlotID},Request.Scheme)','Delete')" class="btn btn-danger"><i class="far fa-thrash"></i>Delete</a>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                <input id="TlastIndex" type="hidden" value="0" />
+            </div>
+        </div>
+        <button id="update-profile-button" type="submit" class="btn btn-primary" onclick="validate()">Save</button>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $('#module-select').chosen(
+            { max_selected_options: 4, width: "100%" }).addClass('form-control');
+
+
+        showPopup = (url, title) => {
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (res) {
+                    $("#form-modal .modal-body").html(res);
+
+                    $("#form-modal .modal-title").html(title);
+
+                    $("#form-modal").modal('show');
+                }
+            })
+        };
+
+
+        jQueryAjaxPost = (form, title) => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+
+                            $('#form-modal .modal-body').html('');
+                            $('#form-modal .modal-title').html('');
+                            $('#form-modal').modal('hide');
+                            location.reload();
+                        }
+                        else {
+
+                            $('#form-modal .modal-title').html(title);
+                            $('#form-modal .modal-body').html(res.html);
+                            $("#form-modal").modal('show');
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        };
+
+        jQueryAjaxDelete = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    success: function (res) {
+                        $('#form-modal .modal-body').html('');
+                        $('#form-modal .modal-title').html('');
+                        $('#form-modal').modal('hide');
+                        location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            } catch (e) {
+                console.log(e);
+            }
+
+            //to prevent default form submit event
+            return false;
+        };
+
+
+    </script>
+}
+

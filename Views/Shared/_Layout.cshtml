@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TutorBuddy</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/jquery/dist/jquery.js" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/jquery/chosen/chosen.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-5">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/logo.png" alt="Site Logo" class="logo" />
+                </a>
+                <button class="navbar-toggler border-radius-custom" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Resources</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ViewAllTutors">Booking</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial.cshtml" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <br /><br /><br />
+    <div class="container mt-5 vh-100">
+        <main role="main" class="pb-3 ">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div class="text-center">
+        <div class="custom-modal py-5" tabindex="-1" role="dialog" id="form-modal">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p>Modal body text goes here.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <footer class="border-top bg-white text-center text-muted py-3">
+        <div>
+            &copy; @DateTime.Now.Year - TutorBuddy | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/chosen/chosen.jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <script>
+        $(document).ready(function () {
+            var pageH = $(window).height();
+            var footerH = $('#footer').height();
+            var footerT = $('#footer').position().top + footerH;
+            if (footerT < pageH)
+                $('#footer').css('margin-top', 10 + (pageH + footerT) + 'px');
+        })
+    </script>
+
+    @await Html.PartialAsync("_NotificationPartial")
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

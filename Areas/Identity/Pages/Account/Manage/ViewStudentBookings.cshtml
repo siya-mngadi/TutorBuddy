@@ -1,0 +1,178 @@
+﻿@page
+@model ViewStudentBookingsModel
+@{
+    ViewData["Title"] = "View Bookings";
+    ViewData["ActivePage"] = ManageNavPages.ViewStudentBookings;
+}
+<h4>@ViewData["Title"]</h4>
+<div class="col-md-12">
+    <form>
+        @if (Model.Bookings == null || Model.Bookings.Count == 0)
+        {
+
+            <h4 class=" showing text-center">No Bookings</h4>
+
+        }
+        else
+        {
+            <table class="table table-active shadow table-info" style="border-radius:7px; font-size:medium">
+                <thead>
+                    <tr>
+                        <th>
+                            Module
+                        </th>
+                        <th>
+                            Student Name
+                        </th>
+                        <th>
+                            Session Day
+                        </th>
+                        <th>
+                            Start Time
+                        </th>
+                        <th>
+                            End Time
+                        </th>
+                        <th>
+                            Booking Fee (R)
+                        </th>
+                        <th class="col-md-12 text-center">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var booking in Model.Bookings)
+                    {
+                        <tr>
+                            <td>
+                                <p>@booking.ModuleName</p>
+                            </td>
+
+                            <td>
+                                <p>@booking.StudentName</p>
+                            </td>
+
+                            <td>
+                                <p>@booking.SessionDay</p>
+                            </td>
+
+                            <td>
+                                <p>@booking.sessionStartTime</p>
+                            </td>
+
+                            <td>
+                                <p>@booking.sessionEndTime</p>
+                            </td>
+
+                            <td>
+                                <p>@booking.bookingFee</p>
+                            </td>
+
+                            <td class="col-md-12 text-center">
+                                @if (!booking.isBooked)
+                                {
+                                    @Html.ActionLink("Accept", "AcceptBooking", "Booking", routeValues: new { Id = booking.bookingId }, htmlAttributes: new { @class = "text-white fas fa-calendar-check btn bg-success mr-1" })
+
+                                    <a onclick="showPopup('@Url.Action("DeleteBooking","Booking",new {Id = booking.bookingId},Request.Scheme)','Delete')" class="btn btn-danger"><i class="far fa-thrash"></i>Delete</a>
+@*
+                                    @Html.ActionLink("Cancel", "DeleteBooking", "Booking", routeValues: new { Id = booking.bookingId }, htmlAttributes: new { @class = "text-white fas fa-trash-alt btn bg-danger" })
+                              *@  }
+                                else
+                                {
+                                    <p class="text ">Booked</p>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    showPopup = (url, title) => {
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (res) {
+                $("#form-modal .modal-body").html(res);
+
+                $("#form-modal .modal-title").html(title);
+
+                $("#form-modal").modal('show');
+            }
+        })
+    };
+
+
+    jQueryAjaxPost = (form, title) => {
+        try {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.isValid) {
+
+                        $('#form-modal .modal-body').html('');
+                        $('#form-modal .modal-title').html('');
+                        $('#form-modal').modal('hide');
+                        location.reload();
+                    }
+                    else {
+
+                        $('#form-modal .modal-title').html(title);
+                        $('#form-modal .modal-body').html(res.html);
+                        $("#form-modal").modal('show');
+                    }
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+            //to prevent default form submit event
+            return false;
+        } catch (ex) {
+            console.log(ex)
+        }
+    };
+
+    jQueryAjaxDelete = form => {
+        try {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                success: function (res) {
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+                    location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+
+        //to prevent default form submit event
+        return false;
+    };
+
+</script>
+}

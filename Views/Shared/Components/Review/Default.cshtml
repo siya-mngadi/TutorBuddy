@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Review>
+
+<div class="col-sm-12 border-top">
+    @if (Model.Count() == 0)
+    {
+        <h4>No Review For this Tutor</h4>
+    }
+    else
+    {
+        <h4 class="text-info">Reviews</h4>
+        <div style="max-height: 400px; scroll-behavior: smooth; overflow: auto;">
+
+            <table class="col-sm-12">
+
+                @foreach (Review review in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="col-sm-10 border-bottom">
+                                <div class="col-sm-12">
+                                    <strong>@review.Stud.FirstName-@review.Stud.LastName</strong>
+                                </div>
+                                <div class="col-sm-6">
+                                    <small class="text-info">Rating: @review.Rating</small>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>@review.ReviewDescription</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+
+
+
+</div>

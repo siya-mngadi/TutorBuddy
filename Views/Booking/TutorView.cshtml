@@ -1,0 +1,302 @@
+﻿@model TutorBuddy.Models.Student
+    @{
+        ViewData["Title"] = "View Tutor";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+        Review review = ViewData["Review"] as Review;
+
+    }
+
+<div class="row">
+    <section class="col-7">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="~/IMGprofiles/@(Model.UserProfile)"
+                         style="text-align:center;border-radius:17px" width="140" height="140" alt="profile" />
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </dt>
+                        <dd class="col-sm-4">
+                            @Html.DisplayFor(model => model.FirstName)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </dt>
+                        <dd class="col-sm-4">
+                            @Html.DisplayFor(model => model.LastName)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.StudNum)
+                        </dt>
+                        <dd class="col-sm-4">
+                            @Html.DisplayFor(model => model.StudNum)
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.YearOfStudy)
+                        </dt>
+                        <dd class="col-sm-4">
+                            @Html.DisplayFor(model => model.YearOfStudy)
+                        </dd>
+
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+            <h3>Modules Offered</h3>
+            <table class="col-sm-12 table table-striped">
+                <thead>
+                    <tr>
+                        <th>Module Code</th>
+                        <th>Module Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (@Model.TutorModules != null)
+                    {
+                        @foreach (TutorModule module in Model.TutorModules)
+                        {
+                            <tr>
+                                <td>
+                                    @module.ModuleCode
+                                </td>
+
+                                <td>
+                                    @module.Module.ModuleName
+                                </td>
+                            </tr>
+
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <hr />
+            <h3>Time Slots Available</h3>
+            <table class="col-sm-12 table table-striped">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (@Model.TimeSlots != null)
+                    {
+                        @foreach (TimeSlot slot in Model.TimeSlots)
+                        {
+                            <tr>
+                                <td>
+                                    @slot.SessionDay
+                                </td>
+
+                                <td>
+                                    @slot.SessionStartTime.TimeOfDay
+                                </td>
+
+                                <td>
+                                    @slot.SessionEndTime.TimeOfDay
+                                </td>
+                            </tr>
+
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <a class="btn btn-primary" asp-action="ViewAllTutors" asp-controller="Home">Back To Tutors List</a>
+        </div>
+    </section>
+
+    <section class="col-5">
+        <div class="col-md-12">
+
+
+            <div class="row">
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-6">
+                            Type Of Tutor:
+                        </dt>
+                        <dd class="col-sm-4">
+                            @if (Model.TypeOfTutor)
+                            {
+                                <span>Paid</span>
+                            }
+                            else
+                            {
+                                <span>Free</span>
+                            }
+
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.HourlyFee)
+                        </dt>
+                        <dd class="col-sm-4">
+                            R @Model.HourlyFee
+                        </dd>
+                    </dl>
+                    @Html.ActionLink("Book Tutor", "Booking", "Home", routeValues: new { studentId = Model.StudNum }, htmlAttributes: new { @class = "text-white btn btn-success p-2 w-100" })
+                </div>
+                
+                <div class="col-md-4 border-left text-center mt-4">
+                    <h6>Download Files</h6>
+                    @*<a onclick="showPopup('@Url.Action("DeleteBooking","Booking",new {Id = booking.bookingId},Request.Scheme)','Delete')" class="btn btn-danger"><i class="far fa-thrash"></i>Delete</a>*@
+
+                    @*@if (Model.FileFee != 0)
+            {*@
+
+                    <a onclick="showPopup('@Url.Action("DownloadFile", "Home",values:new { Id=Model.TutorID },Context.Request.Scheme)', 'Download')">
+                        <i class="p-3 btn btn-primary"><span class="fas fa-download"></span></i>
+                    </a>
+                    @*}
+            else
+            {
+                <a onclick="showPopup('@Url.Action("payFee", "Booking")', 'Download')">
+                    <i class="p-3 btn btn-danger"><span class="fas fa-download"></span></i>
+                </a>
+            }*@
+
+                </div>
+
+            </div>
+          
+
+            @*<a class="btn btn-success p-2 w-100" asp-action="Booking" asp-controller="Home" asp-route-id="@Model.StudNum">Book Tutor</a>*@
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-sm-12 border-top">
+                <form method="post" asp-action="SaveReview" asp-controller="Booking" asp-route-comment="@review.ReviewDescription" asp-route-TutorId="@Model.TutorID" asp-route-rating="@review.Rating">
+                    <div class="input-group m-1">
+                        <dl class="row">
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => review.ReviewDescription)
+                            </dt>
+                            <dd class="col-sm-10">
+                                <textarea type="text" class="form-control" asp-for="@review.ReviewDescription" name="comment"></textarea>
+                                <span class="text-danger" asp-validation-for="@review.ReviewDescription"></span>
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => review.Rating)
+                            </dt>
+                            <dd class="col-sm-10">
+                                <div class="review_select">
+                                    <select asp-for="@review.Rating" name="rating">
+                                        <option selected value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <span class="text-danger" asp-validation-for="@review.Rating"></span>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-success">Submit</button>
+                </form>
+            </div>
+
+            @await Component.InvokeAsync("Review", arguments: new { TutorId = Model.TutorID })
+        </div>
+     
+    </section>
+    
+</div>
+
+   
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+
+        <script type="text/javascript">
+            showPopup = (url, title) => {
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (res) {
+                        $("#form-modal .modal-body").html(res);
+
+                        $("#form-modal .modal-title").html(title);
+
+                        $("#form-modal").modal('show');
+                    }
+                })
+            };
+
+
+            jQueryAjaxPost = (form, title) => {
+                try {
+                    $.ajax({
+                        type: 'POST',
+                        url: form.action,
+                        data: new FormData(form),
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            if (res.isValid) {
+
+                                $('#form-modal .modal-body').html('');
+                                $('#form-modal .modal-title').html('');
+                                $('#form-modal').modal('hide');
+                                location.reload();
+                            }
+                            else {
+
+                                $('#form-modal .modal-title').html(title);
+                                $('#form-modal .modal-body').html(res.html);
+                                $("#form-modal").modal('show');
+                            }
+
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                    //to prevent default form submit event
+                    return false;
+                } catch (ex) {
+                    console.log(ex)
+                }
+            };
+
+            jQueryAjaxDelete = form => {
+                try {
+                    $.ajax({
+                        type: 'POST',
+                        url: form.action,
+                        success: function (res) {
+                            $('#form-modal .modal-body').html('');
+                            $('#form-modal .modal-title').html('');
+                            $('#form-modal').modal('hide');
+                            location.reload();
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                } catch (e) {
+                    console.log(e);
+                }
+
+                //to prevent default form submit event
+                return false;
+            };
+
+
+        </script>
+    }

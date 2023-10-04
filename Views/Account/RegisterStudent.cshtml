@@ -1,0 +1,93 @@
+﻿@*@using TutorBuddy.Models
+@model Student*@
+@model TutorBuddy.Models.InputModel.StudentInputModel
+@{
+    ViewData["Title"] = "RegisterStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card col-md-8 offset-md-3">
+    <div class="card-header bg-transparent text-uppercase text-black-50">
+        <h3>Student Registration</h3>
+    </div>
+    <div class="card-body">
+        <form asp-route-returnUrl="" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group" style="text-align:center">
+                        <div style="text-align:center" class="noselect">
+                            <input asp-for="@Model.Student.DisplayPhoto" style="color:transparent;text-align: center;border:none;"
+                                   onchange="document.getElementById('DisplayPhotoPrev').src = window.URL.createObjectURL(this.files[0])" />
+                            <br /> <img style="text-align:center; border:2px dotted black;border-radius:17px" id="DisplayPhotoPrev" src="~/IMGprofiles/DefaultProfile.png" alt="Profile Photo"
+                                        width="180" height="180" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.FirstName"></label>
+                        <input asp-for="@Model.Student.FirstName" class="form-control" readonly />
+                        <span asp-validation-for="@Model.Student.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.LastName"></label>
+                        <input asp-for="@Model.Student.LastName" class="form-control" readonly />
+                        <span asp-validation-for="@Model.Student.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.StudNum"></label>
+                        <input asp-for="@Model.Student.StudNum" class="form-control" />
+                        <span asp-validation-for="@Model.Student.StudNum" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.YearOfStudy" class="control-label">Year of Study</label>
+
+                        <select asp-for="@Model.Student.YearOfStudy" class="form-control">
+                            <option value="" disabled selected>Select YOS</option>
+                            <option value="1">1st</option>
+                            <option value="2">2nd</option>
+                            <option value="3">3rd</option>
+                            <option value="4">Honours</option>
+                            <option value="5">Masters</option>
+                            <option value="6">Doctorate</option>
+                            <option value="7">PhD</option>
+                        </select>
+
+                        <span asp-validation-for="@Model.Student.YearOfStudy" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-dm-4">
+                <button type="submit" class="btn btn-primary btn-block">Finish Registration</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}
+

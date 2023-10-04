@@ -1,0 +1,102 @@
+﻿@*@model IEnumerable<TutorBuddy.Models.Student>*@
+@using TutorBuddy.Models;
+@model dynamic
+@using System.Text
+@{
+    ViewData["Title"] = "All Tutors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="get" asp-action="ViewAllTutors">
+            <div class="row" style="align-items:center">
+                <div class="col-md-6 align-items-center">
+                    <input type="search" class="form-control" placeholder="Search Tutor or Module"
+                           value="@ViewData["getTutor"]" name="tutorSearch" />
+                </div>
+                <div class="col-md-2 align-items-center">
+                    @*<input type="submit" value="Search" class="form-control btn-dark" />*@
+                    <button type="submit" class="btn btn-dark"><span class="fas fa-search"></span></button>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <div class="tutorsListScrollable">
+            <table class="list-inline col-md-12" style="margin-bottom:3px">
+                <tr>
+                    @foreach (Student student in Model)
+                    {
+                        @if (student.TutorID == null)
+                        {
+                            continue;
+                        }
+
+
+                        <td class="list-inline-item col-md-12">
+
+                            <div class="card_tutor">
+                                <div class="card_img align-content-center">
+                                    @if (student.UserProfile != null)
+                                    {
+                                        <img src="~/IMGprofiles/@student.UserProfile" width="180" height="180" style="border-radius:17px" alt="avatar" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/IMGprofiles/DefaultProfile.png" width="180" height="180" style="border-radius:17px" alt="avatar" />
+                                    }
+
+                                </div>
+                                <div class="card_content">
+                                    <h4><span>@Html.DisplayFor(modelItem => student.FirstName) &#8208 @Html.DisplayFor(modelItem => student.LastName)</span></h4>
+                                    <p>Year: @Html.DisplayFor(modelItem => student.YearOfStudy)</p>
+                                    <p>R @Html.DisplayFor(modelItem => student.HourlyFee)/Hour</p>
+                                    <p>
+                                        @for (int y = 0; y < 5; y++)
+                                        {
+                                            if (y < student.Rating)
+                                            {
+                                                <i class="fas fa-star" style="color:gold" aria-hidden="true"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star" style="color:black" aria-hidden="true"></i>
+                                            }
+                                        }
+                                    </p>
+                                    @Html.ActionLink("View Tutor", "TutorView", "Booking", routeValues: new { TutorId = student.TutorID }, htmlAttributes: new { @class = "btn btn-secondary" })
+
+                                    @Html.ActionLink("Book Tutor", "Booking", "Home", routeValues: new { studentId = student.StudNum }, htmlAttributes: new { @class = "btn btn-primary" })
+
+                                </div>
+                                <div class="card_price">
+                                    <p style="font-weight:bold">Module(s) Offered</p>
+                                    @if (student.TutorModules != null)
+                                    {
+                                        @foreach (TutorModule module in student.TutorModules)
+                                        {
+                                            <p>@module.ModuleCode: @module.Module.ModuleName</p>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            </table>
+        </div>
+            @if (Model.Count == 0)
+            {
+                <h2 class="text-center">@ViewData["StatusMessage"]</h2>
+                <div class="text-center">
+                    <img src="~/img/NotFoundError.jpg" alt="ErrorImage" />
+                </div>
+
+            }
+        </div>
+    </div>
+
+
+
+
+

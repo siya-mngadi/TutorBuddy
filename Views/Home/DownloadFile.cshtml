@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TutorBuddy.Models.TutorFile>
+
+@{
+    ViewData["Title"] = "Download File";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FileType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FileName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FileDescription)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FileType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FileDescription)
+                        </td>
+                        <td>
+                            @*<a asp-action="DownloadingFile" asp-controller="Home" asp-route-id="@item.FileID" class="btn btn-info">Download</a>
+                           *@
+                           <form method="post" asp-route-Id="@item.FileID" asp-action="DownloadingFile">
+                               <input type="submit" class="btn btn-info" value="Download" />
+                           </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>

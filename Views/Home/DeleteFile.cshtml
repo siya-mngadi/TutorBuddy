@@ -1,0 +1,56 @@
+﻿@model TutorBuddy.Models.TutorFile
+
+@{
+    ViewData["Title"] = "DeleteFile";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+
+
+<form method="post" asp-action="DeleteFile" asp-controller="Home" asp-route-Id="@Model.FileID" onsubmit="return jQueryAjaxDelete(this)">
+
+    <h3>Are you sure you want to delete?</h3>
+    <div>
+        <hr />
+        @*<dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.FileType)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.FileType)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.FileName)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.FileName)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.FileDescription)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.FileDescription)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.TutorID)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.TutorID)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.FileUploaded)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.FileUploaded)
+                </dd>
+            </dl>*@
+
+
+        <input type="hidden" asp-for="FileID" />
+        <input type="submit" value="Confirm" class="btn btn-warning" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

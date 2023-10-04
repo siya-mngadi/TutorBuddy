@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewData["Title"] = "payFee";
+    Layout = null;
+}
+@using TutorBuddy.Models.InputModel
+
+@model PayInputModel
+
+<div class="col-12 text-lg-center">
+    <form method="post" asp-action="payFee" asp-controller="Booking" onsubmit="return jQueryAjaxPost(this)">
+        <div class="col-md-12">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input asp-for="bookingId" class="form-control" hidden />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" readonly />
+                        <span asp-validation-for="FirstName"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" readonly />
+                        <span asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingFee"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            R
+                        </div>
+                    </div>
+                    <input asp-for="BookingFee" class="form-control" readonly />
+                </div>
+                <span asp-validation-for="BookingFee"></span>
+            </div>
+
+            <div class="shadow-sm tab-pane">
+                <div class="form-group">
+                    <label asp-for="CardNumber"></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">#</div>
+                        </div>
+                        <input asp-for="CardNumber" class="form-control" />
+                    </div>
+                    <span asp-validation-for="CardNumber" style="color:red"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Month"></label>
+                            <input asp-for="Month" class="form-control" />
+                            <span asp-validation-for="Month" style="color:red"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Year"></label>
+                            <input asp-for="Year" class="form-control" />
+                            <span asp-validation-for="Year" style="color:red"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="CCV"></label>
+                            <input asp-for="CCV" class="form-control" />
+                            <span asp-validation-for="CCV" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block" id="submitForm">Pay</button>
+        </div>
+    </form>
+
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+
+        
+
+    </script>
+}
+
+

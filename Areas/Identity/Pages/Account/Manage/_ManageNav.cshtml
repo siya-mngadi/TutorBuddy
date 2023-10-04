@@ -1,0 +1,39 @@
+﻿@inject SignInManager<Profile> SignInManager
+@inject UserManager<Profile> userManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+
+   var profile = await userManager.GetUserAsync(User);
+}
+<ul class="nav nav-pills flex-column">
+
+    @if (profile.TutorID == null)
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+    }
+    else
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.IndexTutorNavClass(ViewContext)" id="tutor-profile" asp-page="./Index_Tutor">Profile</a></li>
+    }
+
+
+    @if (profile.TutorID == null)
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ViewBookingsNavClass(ViewContext)" id="view-bookings" asp-page="./ViewBookings">View Bookings</a></li>
+    }
+    else
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ViewBookingsNavClass(ViewContext)" id="view-bookings" asp-page="./ViewBookings">My Bookings</a></li>
+
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ViewStudentBookingNavClass(ViewContext)" id="student-bookings" asp-page="./ViewStudentBookings">Booking Requests</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.UploadFileNavClass(ViewContext)" id="uploadfile" asp-page="./UploadFile">Upload Files</a></li>
+    }
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    @if (hasExternalLogins)
+    {
+        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
+    }
+
+
+
+</ul>

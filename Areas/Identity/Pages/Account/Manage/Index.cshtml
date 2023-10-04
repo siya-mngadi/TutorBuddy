@@ -1,0 +1,89 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <form id="profile-form" asp-route-returnUrl="" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" disabled />
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" disabled />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" disabled />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Input.YearOfStudy"></label>
+                            <select asp-for="Input.YearOfStudy" class="form-control">
+                                <option value="" disabled selected>@Model.Input.YearOfStudy</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="Honours">Honours</option>
+                                <option value="Masters">Masters</option>
+                                <option value="Doctorate">Doctorate</option>
+                                <option value="PhD">PhD</option>
+                            </select>
+                            <span asp-validation-for="Input.YearOfStudy" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Input.PhoneNumber"></label>
+                            <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Optional" />
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" style="text-align:center">
+                    <div style="text-align:center" class="noselect">
+                        <input asp-for="@Model.Input.DisplayPhoto" style="color:transparent;text-align: center;border:none;"
+                               onchange="document.getElementById('DisplayPhotoPrev').src = window.URL.createObjectURL(this.files[0])" />
+                        <br /> <img style="text-align:center; border:2px dotted black;border-radius:17px" id="DisplayPhotoPrev" src="~/IMGprofiles/@(Model.Input.UserProfile)" alt="Profile Photo"
+                                    width="180" height="180" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}

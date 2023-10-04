@@ -1,0 +1,46 @@
+﻿@model TutorBuddy.Models.InputModel.SlotInputModel
+
+@{
+    ViewData["Title"] = "AddTimeSlot";
+    Layout = null;
+}
+        <div class="col-md-12">
+            <form method="post" asp-action="AddTimeSlot" asp-controller="Home"  onsubmit="return jQueryAjaxPost(this)">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="SessionDay" class="control-label"></label>
+                            @Html.DropDownListFor(x =>  x.SessionDay, new SelectList(Model.Weekdays), htmlAttributes: new { @class = "form-control", @id = "ModuleId" })
+                            <span asp-validation-for="SessionDay" class="text-danger"></span>
+                        </div>
+                    </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="SessionStartTime" class="control-label"></label>
+                                <input asp-for="SessionStartTime" class="form-control" />
+                                <span asp-validation-for="SessionStartTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="SessionEndTime" class="control-label"></label>
+                                <input asp-for="SessionEndTime" class="form-control" />
+                                <span asp-validation-for="SessionEndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <input asp-for="TutorID" class="form-control" hidden />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                    </div>
+            </form>
+        </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

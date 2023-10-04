@@ -1,0 +1,15 @@
+﻿
+<script>
+
+        var msg = @(TempData["Notify"] != null ? Html.Raw(TempData["Notify"]):Html.Raw("undefined"));
+
+        if (msg) {
+            swal.fire({
+                title: msg.title,
+                text: msg.text,
+                icon: msg.icon
+            });
+        } else {
+            Alert("An Error Occurred");
+        }
+</script>

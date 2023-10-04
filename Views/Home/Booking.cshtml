@@ -1,0 +1,223 @@
+﻿@using TutorBuddy.Models
+@model TutorBuddy.Models.ParentModel
+
+@{
+    ViewData["Title"] = "Booking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Booking Form</h3>
+
+<hr />
+
+
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <form asp-action="Booking">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h5>My Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Student.FirstName" class="control-label"></label>
+                    <input asp-for="Student.FirstName" class="form-control" readonly />
+                    <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Student.LastName" class="control-label"></label>
+                    <input asp-for="Student.LastName" class="form-control" readonly />
+                    <span asp-validation-for="Student.LastName" class="text-danger"></span>
+                </div>
+            </div><br />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="SingleBooking.StudNum" class="control-label"></label>
+                    <input asp-for="SingleBooking.StudNum" class="form-control" readonly />
+                    <span asp-validation-for="SingleBooking.StudNum" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Profile.Email" class="control-label"></label>
+                    <input asp-for="Profile.Email" class="form-control" readonly />
+                    <span asp-validation-for="Profile.Email" class="text-danger"></span>
+                </div>
+            </div><br />
+            <hr />
+            <h5>Tutor Details</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="Tutor.FirstName" class="control-label"></label>
+                    <input asp-for="Tutor.FirstName" class="form-control" readonly />
+                    <span asp-validation-for="Tutor.FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Tutor.LastName" class="control-label"></label>
+                    <input asp-for="Tutor.LastName" class="form-control" readonly />
+                    <span asp-validation-for="Tutor.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="SingleBooking.BookingFee" class="control-label">Booking Fee(R)</label>
+                    <input asp-for="SingleBooking.BookingFee" class="form-control" readonly />
+                    <span asp-validation-for="SingleBooking.BookingFee" class="text-danger"></span>
+                </div>
+            </div><br />
+            <hr />
+            <h5>Session Details</h5>
+            <div class="col-md-12">
+                @if (Model.TimeSlots != null)
+                {
+                    <table class="table table-active shadow table-info" style="border-radius:7px">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Date ID
+                                </th>
+                                <th>
+                                    Day
+                                </th>
+
+                                <th>
+                                    Start Time
+                                </th>
+
+                                <th>
+                                    Start End
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var times in Model.TimeSlots)
+                            {
+                                <tr>
+                                    <td>
+                                        <p>@times.TimeSlotID</p>
+                                    </td>
+                                    <td>
+                                        <p>@times.SessionDay</p>
+                                    </td>
+
+                                    <td>
+                                        <p>@times.SessionStartTime.TimeOfDay</p>
+                                    </td>
+                                    <td>
+                                        <p>@times.SessionEndTime.TimeOfDay</p>
+                                    </td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                }
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="SingleBooking.TutorModuleID" for="selectmodule" class="control-label" id="selectmodule">Module</label>
+
+                        @Html.DropDownListFor(x => x.SingleBooking.TutorModuleID, Model.ListModules.Select(x => new SelectListItem { Text = x.ModuleCode, Value = x.TutorModuleID.ToString() }), new { @class = "form-control" })
+
+                        <span asp-validation-for="SingleBooking.TutorModuleID" class="text-danger" id="selectmodule"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="SingleBooking.TimeSlotId" for="selectmodule" class="control-label">Choose Date ID</label>
+
+                        @Html.DropDownListFor(x => x.SingleBooking.TimeSlotId, Model.TimeSlots.Select(x => new SelectListItem { Text = x.TimeSlotID.ToString(), Value = x.TimeSlotID.ToString() }), new { @class = "form-control" })
+
+                        <span asp-validation-for="SingleBooking.TimeSlotId" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div><br />
+
+                  <div class="form-group">
+                      <input type="submit" value="Finish Booking" id="btnBooked" onclick="Toasty()" class="btn btn-success"/>
+                  </div>
+
+        </form>
+
+    </div>
+
+    <div class="col-md-2 position-sticky">
+        <a asp-action="TutorView" class="btn btn-primary" asp-controller="Booking">Back To Tutor</a>
+    </div>
+
+
+    <div class="modal fade" id="ModalPopUp" role="dialog" style="width:100%">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Tutor.HourlyFee" class="control-label">Fee</label>
+                            <input asp-for="Tutor.HourlyFee" class="form-control" readonly />
+                            <span asp-validation-for="Tutor.HourlyFee" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Student.FirstName" class="control-label"></label>
+                            <input asp-for="Student.FirstName" class="form-control" readonly />
+                            <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Student.LastName" class="control-label"></label>
+                            <input asp-for="Student.LastName" class="form-control" readonly />
+                            <span asp-validation-for="Student.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Tutor.FirstName" class="control-label">Card Number</label>
+                            <input class="form-control" />
+                            <span asp-validation-for="Tutor.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Tutor.LastName" class="control-label">Expiry</label>
+                            <input class="form-control" />
+                            <span asp-validation-for="Tutor.LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Tutor.HourlyFee" class="control-label">CCV</label>
+                            <input class="form-control" />
+                            <span asp-validation-for="Tutor.HourlyFee" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal-footer">
+                            <button id="DivClose" type="button" class="close btn btn-success" data-dismiss="modal">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.10.0.min.js"
+        integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE="
+        crossorigin="anonymous">
+</script>
+<script>
+
+    $("#btnLink").click(function () {
+        $('#ModalPopUp').modal('show');
+    })
+
+</script>

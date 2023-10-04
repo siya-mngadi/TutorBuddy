@@ -1,0 +1,21 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="col-md-10">
+    <div class="row">
+        <div class="text-center">
+            <div class="col-sm-5">
+                <h3>An error occurred while processing your request.</h3>
+
+                <p class="text-danger">Error: @Model.Message</p>
+            </div>
+
+            <div class="col-sm-5 img-fluid">
+                <img src="~/img/system_Error.jpg" alt="screen image" />
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,256 @@
+﻿@model TutorBuddy.Models.InputModel.TutorInputModel
+
+@{
+    ViewData["Title"] = "RegisterStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card col-md-8 offset-md-3">
+    <div class="card-header bg-transparent text-uppercase text-black-50">
+        <h3>Tutor Registration</h3>
+    </div>
+
+    <div class="card-body">
+        <form id="subForm" method="post" enctype="multipart/form-data" >
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group" style="text-align:center">
+                        <div style="text-align:center" class="noselect">
+                            <input asp-for="@Model.Student.DisplayPhoto" style="color:transparent;text-align: center;border:none;"
+                                   onchange="document.getElementById('DisplayPhotoPrev').src = window.URL.createObjectURL(this.files[0])" />
+                            <br /> <img style="text-align:center; border:2px dotted black;border-radius:17px" id="DisplayPhotoPrev" src="~/IMGprofiles/DefaultProfile.png" alt="Profile Photo"
+                                        width="180" height="180" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.FirstName"></label>
+                        <input asp-for="@Model.Student.FirstName" class="form-control" readonly />
+                        <span asp-validation-for="@Model.Student.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.LastName"></label>
+                        <input asp-for="@Model.Student.LastName" class="form-control" readonly />
+                        <span asp-validation-for="@Model.Student.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.StudNum"></label>
+                        <input asp-for="@Model.Student.StudNum" class="form-control" id="tutorId" />
+                        <span asp-validation-for="@Model.Student.StudNum" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.YearOfStudy">Year of Study</label>
+                        <select asp-for="@Model.Student.YearOfStudy" class="form-control">
+                            <option value="" disabled selected>Select YOS</option>
+                            <option value="1st">1st</option>
+                            <option value="2nd">2nd</option>
+                            <option value="3rd">3rd</option>
+                            <option value="Honours">Honours</option>
+                            <option value="Masters">Masters</option>
+                            <option value="Doctorate">Doctorate</option>
+                            <option value="PhD">PhD</option>
+                        </select>
+                        <span asp-validation-for="@Model.Student.YearOfStudy" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Tutor Section</h2>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label asp-for="@Model.Student.TypeOfTutor"></label>
+                        <input type="checkbox" asp-for="@Model.Student.TypeOfTutor" class="form-control" id="MyChk" onchange="onValueChanged()" />
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+
+                    <div class="form-group">
+                        <label>Hourly Fee (R)</label>
+                        <input type="number" asp-for="@Model.Student.HourlyFee" id="HourlyFeeId" readonly class="form-control" />
+                        <span asp-validation-for="@Model.Student.HourlyFee"></span>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Module</label>
+                        @Html.ListBoxFor(x => x.Student.ModuleList, Model.Modules.Select(x => new SelectListItem { Text = x.ModuleName, Value = x.ModuleCode }), new { htmlAttributes = new { @class = "form-control" }, id = "module-select", @multiple = "multiple" })
+
+                        <span asp-validation-for="@Model.Student.TutorModules"></span>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <table class="col-md-12 table table-responsive" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Day
+                                </th>
+
+                                <th>
+                                    Start Time
+                                </th>
+
+                                <th>
+                                    End Time
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int y = 0; y < Model.Student.TimeSlots.Count && y < 4; y++)
+                            {
+                                <tr>
+                                    <td>
+
+                                        @Html.DropDownListFor(x => x.Student.TimeSlots[y].SessionDay, new SelectList(Model.Weekdays), htmlAttributes: new { @class = "form-control", @id = "ModuleId" })
+
+                                    </td>
+
+                                    <td>
+@*
+                                        @Html.EditorFor(x => x.Student.TimeSlots[y].SessionStartTime, new { htmlAttributes = new { @class = "form-control" }, @type = "time" })
+                                        
+                                        *@
+                                        <input type="time" asp-for="@Model.Student.TimeSlots[y].SessionStartTime" id="startTime" class="form-control" onchange="validateHhMm(this);" />
+                                    </td>
+
+                                    <td>
+                                        @*
+        @Html.EditorFor(x => x.Student.TimeSlots[y].SessionEndTime, new { htmlAttributes = new { @class = "form-control" }, @type = "time" })
+                                        *@
+                                        <input type="time" asp-for="@Model.Student.TimeSlots[y].SessionEndTime" id="endTime" class="form-control" onchange="validateHhMm(this);" />
+
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger px-2 py-2 invisible" id="btn_remove-@y" onclick="DeleteItem(this)">Remove</button>
+                                        <button type="button" class="btn btn-secondary px-2 py-2 visible" id="btn_add-@y" onclick="AddItem(this)">Add</button>
+                                    </td>
+                                </tr>
+
+                            }
+                           
+                        </tbody>
+                    </table>
+
+                </div>
+                <input id="TlastIndex" type="hidden" value="0" />
+            </div>
+            <div class="form-group col-md-3">
+                <button type="submit" class="btn btn-primary btn-block" onclick=" return validate()">Finish Registration</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $('#module-select').chosen(
+            { max_selected_options: 4, width: "100%" }).addClass('form-control');
+
+        function validateHhMm(inputField) {
+            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputField.value);
+
+            if (isValid) {
+                inputField.style.backgroundColor = '#bfa';
+            } else {
+                inputField.style.backgroundColor = '#fba';
+            }
+
+            return isValid;
+        }
+
+        function validate() {
+            var Form = document.getElementById('subForm');
+
+            var startTime = document.getElementById('startTime');
+
+            var endTime = document.getElementById('endTime');
+
+            if (startTime.value < endTime.value) {
+                Form.submit();
+                return true;
+            }
+            else {
+                alert("Please choose correct times")
+            }
+            return false;
+        }
+
+
+        function DeleteItem(btn) {
+            $(btn).closest('tr').remove();
+        }
+
+        function AddItem(btn) {
+
+            var table = document.getElementById('myTable');
+
+            var row = table.getElementsByTagName('tr');
+
+            var rowOuterHtml = row[row.length - 1].outerHTML;
+
+            var lastrowIdx = document.getElementById('TlastIndex').value;
+
+            var nextrowIdx = eval(lastrowIdx) + 1;
+
+            document.getElementById('TlastIndex').value = nextrowIdx;
+
+            rowOuterHtml = rowOuterHtml.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
+            rowOuterHtml = rowOuterHtml.replaceAll('[' + lastrowIdx + ']', '[' + nextrowIdx + ']');
+            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastrowIdx, '-' + nextrowIdx);
+
+            if (nextrowIdx < 4) {
+                var newRow = table.insertRow();
+                newRow.innerHTML = rowOuterHtml;
+
+                var btnAddId = btn.id;
+                var btnDeletedId = btnAddId.replaceAll('btn_add', 'btn_remove');
+
+                var btnDelete = document.getElementById(btnDeletedId);
+
+                btnDelete.classList.add('visible');
+                btnDelete.classList.remove('invisible')
+
+                var btnAdd = document.getElementById(btnAddId);
+                btnAdd.classList.remove('visible');
+                btnAdd.classList.add('invisible');
+            }
+            
+
+        }
+    </script>
+
+}
+
+
+

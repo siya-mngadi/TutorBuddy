@@ -1,0 +1,19 @@
+﻿@model SingleBooking
+
+@{
+    ViewData["Title"] = "DeleteBooking";
+    Layout = null;
+}
+
+<form method="post" asp-action="DeleteBooking" asp-controller="Booking" asp-route-Id="@Model.BookingID" onsubmit="return jQueryAjaxDelete(this)">
+
+    <h4> Please confirm to delete this record</h4>
+    <div class="text-center">
+        <input type="submit" value="Confirm" class="btn btn-warning" />
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
